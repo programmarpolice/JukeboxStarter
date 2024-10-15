@@ -1,25 +1,29 @@
-const prisma = require("./prisma");
-app.post("/playlists", async (req, res, next) => {
-  try {
-    const { name, ownerId, trackIds } = req.body;
+const express = require("express");
+const app = express();
+const PORT = 3000;
 
-    // Converts array of ids into shape needed for `connect`
-    const tracks = trackIds.map((id) => ({ id: +id }));
+app.use(require("morgan")("dev"));
+app.use(express.json());
+app.use("/users", require("./api/users"));
 
-    const playlist = await prisma.playlist.create({
-      data: {
-        name,
-        description,
-        ownerId: +ownerId,
-        tracks: { connect: tracks },
-      },
-      include: {
-        playlist: true,
-        tracks: true,
-      },
-    });
-    res.status(201).json(reservation);
-  } catch (e) {
-    next(e);
-  }
+// Logging middleware
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.originalUrl}`);
+  next();
+});
+
+// 404
+app.use((req, res, next) => {
+  next({ status: 404, message: "Endpoint not found." });
+});
+
+// Error-handling
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(err.status ?? 500);
+  res.json(err.message ?? "Sorry, something went wrong :(");
+});
+
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}...`);
 });

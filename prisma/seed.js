@@ -1,28 +1,34 @@
-const prisma = require("");
+const prisma = require("../prisma");
+const { faker } = require("@faker-js/faker");
 
-const seed = async (numUsers = 5, numTracks = 20) => {
-  const users = Array.from({ length: numUsers }, (_, i) => ({
-    username: `User ${i + 1}`,
+const seed = async (numUsers = 5, numTracks = 20, numPlaylists = 10) => {
+  const users = Array.from({ length: numUsers }, () => ({
+    username: faker.person.fullName(),
   }));
   await prisma.user.createMany({ data: users });
 
-  const tracks = Array.from({ length: numTracks }, (_, i) => ({
-    name: `Track ${i + 1}`,
+  const tracks = Array.from({ length: numTracks }, () => ({
+    name: faker.person.fullName(),
   }));
   await prisma.track.createMany({ data: tracks });
 
-  const numPlaylists = 10;
   for (let i = 0; i < numPlaylists; i++) {
     const trackNumber = 8 + Math.floor(Math.random() * 20);
-    const trackId = Array.from({ length: trackNumber }, () => ({
+
+    const tracks = Array.from({ length: trackNumber }, () => ({
       id: 1 + Math.floor(Math.random() * numTracks),
     }));
+
     await prisma.playlist.create({
       data: {
-        name: `Playlist ${(i = 1)}`,
+        name: faker.music.songName(),
         description: "Here is a description",
-        ownerId: 1 + Math.floor(Math.random() * numPlaylists),
-        trackId: { connect: trackId },
+        owner: {
+          connect: {
+            id: Math.floor(Math.random() * numUsers + 1),
+          },
+        },
+        tracks: { connect: tracks },
       },
     });
   }
