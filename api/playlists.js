@@ -13,26 +13,35 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.post("/:id/playlists", async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const { name, userId, trackIds } = req.body;
-
-    // Converts array of ids into shape needed for `connect`
-    const tracks = trackIds.map((id) => ({ id: +id }));
-
-    const playlist = await prisma.playlist.create({
-      data: {
-        name,
-        description,
-        owner: +userId,
-        tracks: { connect: tracks },
-      },
-      include: {
-        playlist: true,
-        tracks: true,
-      },
+    const playlist = await prisma.playlist.findUnique({
+      where: { id: +id },
+      include: { tracks: true, owner: true },
     });
-    res.status(201).json(reservation);
+    if (playlist) {
+      res.json(playlist);
+    } else {
+      next({ status: 404, message: `Playlist with id ${id} does not exist.` });
+    }
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.post("/", async (req, res, next) => {
+  const {
+    name,
+    description,
+    ownerId,
+    tracks: { connect: tracks },
+  } = req.body;
+  try {
+    const playlist = await prisma.playlist.create({
+      data: { name, description, ownerId, tracks },
+    });
+    res.status(201).json(playlist);
   } catch (e) {
     next(e);
   }

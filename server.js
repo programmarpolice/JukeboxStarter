@@ -6,7 +6,7 @@ app.use(require("morgan")("dev"));
 app.use(express.json());
 app.use("/users", require("./api/users"));
 app.use("/playlists", require("./api/playlists"));
-// app.use("/tracks", require("./api/tracks"));
+app.use("/tracks", require("./api/tracks"));
 
 // Logging middleware
 app.use((req, res, next) => {

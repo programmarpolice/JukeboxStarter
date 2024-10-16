@@ -9,21 +9,37 @@ GET {{host}}/users/2
 ### Get all playlists
 GET {{host}}/playlists
 
-### Get specific playlist
+### Get all tracks
+GET {{host}}/tracks
+
+### Get specific playlist/ GET /playlists/:id`
+/ GET {{host}}/playlists/3
+
+### Get tracks by id
+/ GET {{host}}/tracks/4
 
 ### Post a playlist
-POST {{host}}/users/2/playlists
+POST {{host}}/playlists
 Content-Type: application/json
 
 {
   "name": "Hungry Melody",
   "description": "Beautiful song",
-  "owner": 6,
+  "ownerId": 6,
   "tracks": 12
 }
 
-### Get all tracks
-
-### Get tracks by id
 
 
+
+
+
+# `/playlists` router
+
+# - `POST /playlists` creates a new playlist
+#   - the request should indicate the owner of the playlist and the tracks in the playlist
+
+# `/tracks` router
+
+# - `GET /tracks` sends array of all tracks
+# - `GET /tracks/:id` sends specific track
