@@ -26,28 +26,3 @@ router.get("/:id", async (req, res, next) => {
     next(e);
   }
 });
-
-// app.post("/playlists", async (req, res, next) => {
-//   try {
-//     const { name, userId, trackIds } = req.body;
-
-//     // Converts array of ids into shape needed for `connect`
-//     const tracks = trackIds.map((id) => ({ id: +id }));
-
-//     const playlist = await prisma.playlist.create({
-//       data: {
-//         name,
-//         description,
-//         owner: +userId,
-//         tracks: { connect: tracks },
-//       },
-//       include: {
-//         playlist: true,
-//         tracks: true,
-//       },
-//     });
-//     res.status(201).json(reservation);
-//   } catch (e) {
-//     next(e);
-//   }
-// });

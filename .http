@@ -7,10 +7,20 @@ GET {{host}}/users
 GET {{host}}/users/2
 
 ### Get all playlists
+GET {{host}}/playlists
 
 ### Get specific playlist
 
 ### Post a playlist
+POST {{host}}/users/2/playlists
+Content-Type: application/json
+
+{
+  "name": "Hungry Melody",
+  "description": "Beautiful song",
+  "owner": 6,
+  "tracks": 12
+}
 
 ### Get all tracks
 

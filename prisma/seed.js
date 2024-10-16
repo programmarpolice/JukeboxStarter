@@ -13,7 +13,7 @@ const seed = async (numUsers = 5, numTracks = 20, numPlaylists = 10) => {
   await prisma.track.createMany({ data: tracks });
 
   for (let i = 0; i < numPlaylists; i++) {
-    const trackNumber = 8 + Math.floor(Math.random() * 20);
+    const trackNumber = 1 + Math.floor(Math.random() * 20);
 
     const tracks = Array.from({ length: trackNumber }, () => ({
       id: 1 + Math.floor(Math.random() * numTracks),
@@ -23,11 +23,7 @@ const seed = async (numUsers = 5, numTracks = 20, numPlaylists = 10) => {
       data: {
         name: faker.music.songName(),
         description: "Here is a description",
-        owner: {
-          connect: {
-            id: Math.floor(Math.random() * numUsers + 1),
-          },
-        },
+        ownerId: 1 + Math.floor(Math.random() * numPlaylists),
         tracks: { connect: tracks },
       },
     });
